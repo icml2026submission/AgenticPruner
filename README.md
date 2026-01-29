@@ -4,24 +4,33 @@ Anonymous submission for **"AgenticPruner: MAC-Constrained Neural Network Compre
 
 ---
 
+## 📦 Repository Structure
+
+This submission consists of two components:
+
+### 1. **Code Repository (GitHub - This Repository)**
+Contains complete implementation, scripts, and documentation.
+
+### 2. **Model Checkpoints (Hugging Face)**
+🔗 **https://huggingface.co/AgenticPruner/checkpoints**
+
+All trained model weights are hosted on Hugging Face due to file size constraints.
+
+**⚠️ Setup Required:**
+1. Clone this GitHub repository for code
+2. Download checkpoint files from the Hugging Face link above
+3. Place downloaded checkpoints in a `checkpoints/` directory at the repository root
+
+---
+
 ## Contents
 
-This package contains implementation code, model checkpoints, and complete documentation for reproducing all experimental results.
+This package provides complete implementation code, complete documentation and trained models for reproducing all experimental results.
 
 **Structure:**
 ```
-supplementary/
+GitHub Repository (this repository):
 ├── README.md                                  # This file
-├── checkpoints/                               # Model checkpoints
-│   ├── CHECKPOINTS_README.md          
-│   ├── resnet50_finetuned_clean.pth          # 1.81G MACs, 77.04% accuracy
-│   ├── resnet50_pruned_clean.pt       
-│   ├── resnet101_finetuned_clean.pth         # 4.17G MACs, 78.9% accuracy
-│   ├── resnet101_pruned_clean.pt
-│   ├── convnext_small_finetuned_clean.pth    # 8.17G MACs, 82.27% accuracy
-│   ├── convnext_small_pruned_clean.pt
-│   ├── deittiny_finetuned_clean.pth          # 0.61G MACs, 71.65% accuracy
-│   └── deittiny_pruned_clean.pt       
 └── code/                                      # Complete source code
     ├── README.md                              # Code documentation
     ├── requirements.txt                       # Exact dependencies
@@ -35,29 +44,69 @@ supplementary/
     ├── scripts/                               # Standalone scripts
     ├── ablations/                             # Ablation configurations
     └── pbench/                                # Benchmarking tools
+
+Hugging Face Repository (external):
+https://huggingface.co/AgenticPruner/checkpoints
+└── Download these checkpoint files:
+    ├── README.md                             # Documentation for all checkpoints
+    ├── resnet50_finetuned_clean.pth          # 1.81G MACs, 77.04% accuracy
+    ├── resnet50_pruned_clean.pt       
+    ├── resnet101_finetuned_clean.pth         # 4.17G MACs, 78.9% accuracy
+    ├── resnet101_pruned_clean.pt
+    ├── convnext_small_finetuned_clean.pth    # 8.17G MACs, 82.27% accuracy
+    ├── convnext_small_pruned_clean.pt
+    ├── deittiny_finetuned_clean.pth          # 0.61G MACs, 71.65% accuracy
+    └── deittiny_pruned_clean.pt       
 ```
 
 ---
 
 ## Quick Start
 
-### Environment Setup
+### 1. Setup Repository and Environment
 ```bash
+# Clone this repository
+git clone [anonymous-github-link]
+cd [repo-name]
+
+# Create conda environment
 conda create -n agenticpruner python=3.10 -y
 conda activate agenticpruner
+
+# Install dependencies
 cd code
 pip install -r requirements.txt
 ```
 
-### API Configuration
+### 2. Download Model Checkpoints
+```bash
+# Go back to repository root
+cd ..
+
+# Create checkpoints directory
+mkdir -p checkpoints
+
+# Visit: https://huggingface.co/AgenticPruner/checkpoints
+# Click "Files and versions" tab
+# Download the checkpoint files you need
+# Place them in the checkpoints/ directory
+#
+# Alternatively, use huggingface-cli:
+cd checkpoints
+huggingface-cli download AgenticPruner/checkpoints --local-dir .
+cd ..
+```
+
+### 3. API Configuration
 ```bash
 export ANTHROPIC_API_KEY="your_api_key"
 # OR
 export OPENROUTER_API_KEY="your_api_key"
 ```
 
-### Run Pruning (ResNet-50)
+### 4. Run Pruning (ResNet-50)
 ```bash
+cd code
 python main.py \
     --model resnet50 \
     --dataset imagenet \
@@ -73,8 +122,10 @@ python main.py \
     --epochs 100
 ```
 
-### Evaluate Provided Checkpoints
+### 5. Evaluate Provided Checkpoints
 ```bash
+# Make sure checkpoints are downloaded to ../checkpoints/
+
 # ResNet-50
 python eval_agent.py \
     --checkpoint ../checkpoints/resnet50_finetuned_clean.pth \
@@ -115,14 +166,14 @@ cd code/scripts
 # Fine-tune a pruned model
 python finetuning.py \
     --model resnet50 \
-    --checkpoint ../checkpoints/resnet50_pruned_clean.pt \
+    --checkpoint ../../checkpoints/resnet50_pruned_clean.pt \
     --data_path /path/to/imagenet \
     --epochs 100
 
 # Evaluate model
 python evaluate.py \
     --model resnet50 \
-    --checkpoint ../checkpoints/resnet50_finetuned_clean.pth \
+    --checkpoint ../../checkpoints/resnet50_finetuned_clean.pth \
     --data_path /path/to/imagenet
 ```
 
@@ -155,6 +206,8 @@ See `code/ablations/README.md` for LLM comparison and other ablation experiments
 
 ## Provided Checkpoints
 
+**🔗 Download from Hugging Face:** https://huggingface.co/AgenticPruner/checkpoints
+
 We provide both pruned and fine-tuned checkpoints for all four models:
 
 | Model | Pruned Checkpoint | Fine-tuned Checkpoint | MACs | Accuracy |
@@ -164,7 +217,14 @@ We provide both pruned and fine-tuned checkpoints for all four models:
 | ConvNeXt-Small | `convnext_small_pruned_clean.pt` | `convnext_small_finetuned_clean.pth` | 8.17G | 82.27%   |
 | DeiT-Tiny | `deittiny_pruned_clean.pt` | `deittiny_finetuned_clean.pth` | 0.61G | 71.65%   |
 
-See `checkpoints/CHECKPOINTS_README.md` for detailed loading instructions and metadata.
+**Download Instructions:**
+1. Visit https://huggingface.co/AgenticPruner/checkpoints
+2. Click "Files and versions" tab
+3. Download required `.pth` and `.pt` files
+4. Place them in `checkpoints/` directory at repository root
+5. Verify paths match the evaluation commands above
+
+See `checkpoints/README.md` (included in huggingface repository) for detailed loading instructions.
 
 ---
 
